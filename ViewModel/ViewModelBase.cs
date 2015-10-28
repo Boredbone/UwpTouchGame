@@ -15,19 +15,12 @@ namespace Boredbone.XamlTools.ViewModel
         private CompositeDisposable disposables = new CompositeDisposable();
         protected CompositeDisposable Disposables => this.disposables;
 
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public virtual void Dispose()
-        {
-            this.disposables.Dispose();
-        }
+            => this.disposables.Dispose();
 
         protected void RaisePropertyChanged(string propertyName)
-        {
-            var d = PropertyChanged;
-            if (d != null)
-                d(this, new PropertyChangedEventArgs(propertyName));
-        }
+            => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
