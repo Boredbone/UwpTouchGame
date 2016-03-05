@@ -7,7 +7,9 @@ using Reactive.Bindings.Extensions;
 
 namespace UwpTouchGame.Models
 {
-
+    /// <summary>
+    /// Provide a completion event of line trace 
+    /// </summary>
     public class LineTrace : DisposableBase
     {
         private Subject<LineNode> LineCompletedSubject { get; }
@@ -16,10 +18,12 @@ namespace UwpTouchGame.Models
 
         public LineTrace(IObservable<MarkerContainer> hitObservable)
         {
-
-            var hitMarker = hitObservable.Select(x => x.Marker);
-
             this.LineCompletedSubject = new Subject<LineNode>().AddTo(this.Disposables);
+
+            var hitMarker = hitObservable
+                .Select(x => x.Marker)
+                .Publish()
+                .RefCount();
 
             // Line Hit
             var lineObservable = hitMarker

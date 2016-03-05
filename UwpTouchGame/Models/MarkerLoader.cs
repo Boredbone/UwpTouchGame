@@ -8,7 +8,9 @@ using UwpTouchGame.Resources;
 
 namespace UwpTouchGame.Models
 {
-
+    /// <summary>
+    /// Load marker data
+    /// </summary>
     public class MarkerLoader
     {
 

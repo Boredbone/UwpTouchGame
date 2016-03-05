@@ -6,18 +6,19 @@ using UwpTouchGame.Resources;
 
 namespace UwpTouchGame.Models
 {
+    /// <summary>
+    /// Main Model
+    /// </summary>
     public class CoreModel : DisposableBase
     {
-
         public MarkerManager Markers { get; }
         public ScoreProvider Score { get; }
 
         public CoreModel()
         {
-            this.Markers = new MarkerManager(8).AddTo(this.Disposables);
+            this.Markers = new MarkerManager(GameViewDefinition.HitEventBufferSize).AddTo(this.Disposables);
             this.Score = new ScoreProvider(this.Markers.Hit.Select(x => x.Target)).AddTo(this.Disposables);
             ScoreDefinition.Set(this.Score);
         }
-
     }
 }

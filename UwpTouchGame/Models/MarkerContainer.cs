@@ -5,6 +5,9 @@ using Reactive.Bindings.Extensions;
 
 namespace UwpTouchGame.Models
 {
+    /// <summary>
+    /// Marker status
+    /// </summary>
     public class MarkerContainer : DisposableBase
     {
         public ReactiveProperty<double> X { get; }
@@ -15,12 +18,8 @@ namespace UwpTouchGame.Models
 
         public IMarker Marker { get; }
 
-
-
-
         public MarkerContainer(IMarker source, double x, double y)
         {
-
             this.Marker = source;
 
             this.X = new ReactiveProperty<double>(x).AddTo(this.Disposables);
@@ -43,6 +42,5 @@ namespace UwpTouchGame.Models
                 this.IsHandledSubject.OnNext(true);
             }
         }
-
     }
 }

@@ -43,7 +43,6 @@ namespace UwpTouchGame.Models
             item.IsHandled
                 .DistinctUntilChanged()
                 .Where(x => x)
-                //.Take(1)
                 .Subscribe(_ =>
                 {
                     var arg = this.Pool[this.poolIndex % this.Pool.Length];

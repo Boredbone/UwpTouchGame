@@ -111,9 +111,11 @@
     <Compile Include="Models\NormalMarker.cs" />
     <Compile Include="Models\ScoreProvider.cs" />
     <Compile Include="Models\TimeManager.cs" />
+    <Compile Include="Resources\GameViewDefinition.cs" />
     <Compile Include="Resources\MarkerDefinition.cs" />
     <Compile Include="Resources\ScoreDefinition.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\MarkerViewModel.cs" />
     <Compile Include="Views\ColorToSolidColorBrushValueConverter.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

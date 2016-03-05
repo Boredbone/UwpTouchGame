@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace UwpTouchGame.Models
 {
+    /// <summary>
+    /// Traceable Line
+    /// </summary>
     public class Line : ILine
     {
         public MarkerType Type => MarkerType.Line;

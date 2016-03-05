@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 
 namespace UwpTouchGame.Models
 {
-
+    /// <summary>
+    /// Node of line
+    /// </summary>
     public class LineNode : ILine
     {
         public MarkerType Type => MarkerType.Node;
@@ -32,6 +35,10 @@ namespace UwpTouchGame.Models
             this.IsCaptured = false;
         }
 
+        /// <summary>
+        /// start line tracing
+        /// </summary>
+        /// <param name="observableForContinueCapturing"></param>
         public void Capture(IObservable<ILine> observableForContinueCapturing)
         {
             if (this.isCapturable)
@@ -39,11 +46,14 @@ namespace UwpTouchGame.Models
                 this.isCapturable = false;
                 this.IsCaptured = true;
 
+                // cancel tracing
                 observableForContinueCapturing
                     .Where(x => x.Parent == this)
+                    .Select(_ => Unit.Default)
+                    .Merge(Observable.Return(Unit.Default))
                     .Throttle(TimeSpan.FromMilliseconds(this.livingTime))
                     .Take(1)
-                    .Subscribe(x => this.IsCaptured = false);
+                    .Subscribe(_ => this.IsCaptured = false);
             }
         }
 

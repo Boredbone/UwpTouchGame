@@ -2,8 +2,7 @@
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
     "Microsoft.Xaml.Behaviors.Uwp.Managed": "1.1.0",
-    "ReactiveProperty": "2.5.0",
-    "WinRTTriggers": "1.6.0"
+    "ReactiveProperty": "2.5.0"
   },
   "frameworks": {
     "uap10.0": {}

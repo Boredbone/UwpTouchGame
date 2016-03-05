@@ -20,8 +20,15 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="{x:Bind ViewModel.Text.Value,Mode=OneWay}"/>
-        <TextBlock Grid.Row="1" Text="{x:Bind ViewModel.Score.Value,Mode=OneWay}"/>
+        <TextBlock Grid.Row="0">
+            <Run Text="Score:"/>
+            <Run Text="{x:Bind ViewModel.Score.Value,Mode=OneWay}"/>
+        </TextBlock>
+        
+        <TextBlock Grid.Row="1">
+            <Run Text="Capturing:"/>
+            <Run Text="{x:Bind ViewModel.Count.Value,Mode=OneWay}"/>
+        </TextBlock>
 
         <Grid Grid.Row="2">
 
@@ -31,36 +38,40 @@
                 <RowDefinition Height="200"/>
             </Grid.RowDefinitions>
 
+            <!-- Game View -->
             <Border
-            Background="Gray"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
-            Margin="{x:Bind ViewModel.DisplayPosition.Value,Mode=OneWay}"
-            Visibility="{x:Bind ViewModel.ViewVisibility.Value,Mode=OneWay}"
-            Grid.RowSpan="3">
-                <ItemsControl 
-                ItemsSource="{x:Bind ViewModel.Markers,Mode=OneWay}"
-                HorizontalContentAlignment="Left"
-                VerticalContentAlignment="Bottom"
+                Background="Gray"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
-                Height="{x:Bind ViewModel.TotalHeight.Value,Mode=OneWay}"
-                Grid.Row="2">
+                Margin="{x:Bind ViewModel.DisplayPosition.Value,Mode=OneWay}"
+                Visibility="{x:Bind ViewModel.ViewVisibility.Value,Mode=OneWay}"
+                Grid.RowSpan="3">
+                <!-- Timeline -->
+                <ItemsControl 
+                    ItemsSource="{x:Bind ViewModel.Markers,Mode=OneWay}"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Bottom"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Height="{x:Bind ViewModel.TotalHeight.Value,Mode=OneWay}"
+                    Grid.Row="2">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Grid />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+                    
+                    <!-- Marker -->
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="viewModels:MarkerViewModel" >
                             <Border
-                            Width="{x:Bind Width,Mode=OneWay}"
-                            Height="{x:Bind Height,Mode=OneWay}"
-                            Background="{x:Bind Color.Value,Mode=OneWay,Converter={StaticResource ColorToSolidColorBrush_ValueConverter}}"
-                            Margin="{x:Bind Margin.Value,Mode=OneWay}"
-                            VerticalAlignment="Bottom"
-                            HorizontalAlignment="Left"
-                            IsHitTestVisible="{x:Bind IsEnabled.Value,Mode=OneWay}">
+                                Width="{x:Bind Width,Mode=OneWay}"
+                                Height="{x:Bind Height,Mode=OneWay}"
+                                Background="{x:Bind Color.Value,Mode=OneWay,Converter={StaticResource ColorToSolidColorBrush_ValueConverter}}"
+                                Margin="{x:Bind Margin.Value,Mode=OneWay}"
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Left"
+                                IsHitTestVisible="{x:Bind IsEnabled.Value,Mode=OneWay}">
                                 <Interactivity:Interaction.Behaviors>
                                     <Core:EventTriggerBehavior EventName="PointerPressed">
                                         <Core:InvokeCommandAction Command="{x:Bind DownCommand}"/>
@@ -70,20 +81,19 @@
                                     </Core:EventTriggerBehavior>
                                 </Interactivity:Interaction.Behaviors>
                             </Border>
-                            <!--
-                            PointerEntered="{x:Bind Hold}"-->
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Border>
 
 
-            <Border Opacity="0.5" Background="Black" HorizontalAlignment="Stretch"
+            <!-- Mask -->
+            <Border Opacity="0.5" Background="Black"
+                    HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Grid.Row="0"/>
-
-
-            <Border Opacity="0.5" Background="Black" HorizontalAlignment="Stretch"
+            <Border Opacity="0.5" Background="Black" 
+                    HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Grid.Row="2"/>
 
