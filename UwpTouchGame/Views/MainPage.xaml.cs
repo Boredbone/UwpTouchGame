@@ -34,5 +34,6 @@ namespace UwpTouchGame.Views
         {
             this.ViewModel.Dispose();
         }
+        
     }
 }

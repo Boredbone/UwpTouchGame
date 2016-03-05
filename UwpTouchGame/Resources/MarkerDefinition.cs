@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UwpTouchGame.Models;
 using Windows.UI;
-using Windows.UI.Xaml.Media;
 
 namespace UwpTouchGame.Resources
 {
@@ -20,8 +20,8 @@ namespace UwpTouchGame.Resources
             };
 
 
-        public const double lineLivingTime = 200;
-        public const double lineResolution = 10;
+        public static double LineLivingTime { get; } = 1000;
+        public static double LineResolution { get; } = 10;
     }
 
     public class MarkerStyleItem

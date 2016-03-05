@@ -95,9 +95,21 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Models\CoreModel.cs" />
     <Compile Include="Models\Helpers\ObjectPool.cs" />
+    <Compile Include="Models\HitEventArgs.cs" />
+    <Compile Include="Models\HitType.cs" />
+    <Compile Include="Models\ILine.cs" />
+    <Compile Include="Models\IMarker.cs" />
+    <Compile Include="Models\Line.cs" />
+    <Compile Include="Models\LineNode.cs" />
+    <Compile Include="Models\LineTrace.cs" />
+    <Compile Include="Models\MarkerContainer.cs" />
     <Compile Include="Models\MarkerLoader.cs" />
+    <Compile Include="Models\MarkerManager.cs" />
+    <Compile Include="Models\MarkerType.cs" />
+    <Compile Include="Models\NormalMarker.cs" />
+    <Compile Include="Models\ScoreProvider.cs" />
     <Compile Include="Models\TimeManager.cs" />
     <Compile Include="Resources\MarkerDefinition.cs" />
     <Compile Include="Resources\ScoreDefinition.cs" />

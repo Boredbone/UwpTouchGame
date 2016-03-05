@@ -6,6 +6,9 @@
     xmlns:viewModels="using:UwpTouchGame.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:triggers="using:WinRT.Triggers"
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" 
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d" Unloaded="Page_Unloaded">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -20,14 +23,22 @@
         <TextBlock Grid.Row="0" Text="{x:Bind ViewModel.Text.Value,Mode=OneWay}"/>
         <TextBlock Grid.Row="1" Text="{x:Bind ViewModel.Score.Value,Mode=OneWay}"/>
 
-        <Border
+        <Grid Grid.Row="2">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="200"/>
+            </Grid.RowDefinitions>
+
+            <Border
             Background="Gray"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             Margin="{x:Bind ViewModel.DisplayPosition.Value,Mode=OneWay}"
             Visibility="{x:Bind ViewModel.ViewVisibility.Value,Mode=OneWay}"
-            Grid.Row="2">
-            <ItemsControl 
+            Grid.RowSpan="3">
+                <ItemsControl 
                 ItemsSource="{x:Bind ViewModel.Markers,Mode=OneWay}"
                 HorizontalContentAlignment="Left"
                 VerticalContentAlignment="Bottom"
@@ -35,23 +46,47 @@
                 VerticalAlignment="Bottom"
                 Height="{x:Bind ViewModel.TotalHeight.Value,Mode=OneWay}"
                 Grid.Row="2">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Grid />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="viewModels:MarkerViewModel">
-                        <Border
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="viewModels:MarkerViewModel" >
+                            <Border
                             Width="{x:Bind Width,Mode=OneWay}"
                             Height="{x:Bind Height,Mode=OneWay}"
                             Background="{x:Bind Color.Value,Mode=OneWay,Converter={StaticResource ColorToSolidColorBrush_ValueConverter}}"
                             Margin="{x:Bind Margin.Value,Mode=OneWay}"
                             VerticalAlignment="Bottom"
-                            HorizontalAlignment="Left"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Border>
+                            HorizontalAlignment="Left"
+                            IsHitTestVisible="{x:Bind IsEnabled.Value,Mode=OneWay}">
+                                <Interactivity:Interaction.Behaviors>
+                                    <Core:EventTriggerBehavior EventName="PointerPressed">
+                                        <Core:InvokeCommandAction Command="{x:Bind DownCommand}"/>
+                                    </Core:EventTriggerBehavior>
+                                    <Core:EventTriggerBehavior EventName="PointerEntered">
+                                        <Core:InvokeCommandAction Command="{x:Bind HoldCommand}"/>
+                                    </Core:EventTriggerBehavior>
+                                </Interactivity:Interaction.Behaviors>
+                            </Border>
+                            <!--
+                            PointerEntered="{x:Bind Hold}"-->
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+
+
+            <Border Opacity="0.5" Background="Black" HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Grid.Row="0"/>
+
+
+            <Border Opacity="0.5" Background="Black" HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Grid.Row="2"/>
+
+        </Grid>
     </Grid>
 </Page>

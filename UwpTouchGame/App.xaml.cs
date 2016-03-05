@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Reactive.Bindings;
+using UwpTouchGame.Models;
 using UwpTouchGame.Views;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;

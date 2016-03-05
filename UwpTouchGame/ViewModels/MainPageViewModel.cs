@@ -16,6 +16,9 @@ using UwpTouchGame.Resources;
 using Windows.UI.Xaml;
 using Windows.UI;
 using UwpTouchGame.Models;
+using System.Diagnostics;
+using Windows.UI.Xaml.Input;
+using Boredbone.XamlTools.Extensions;
 
 namespace UwpTouchGame.ViewModels
 {
@@ -23,12 +26,12 @@ namespace UwpTouchGame.ViewModels
     {
         private const double xScale = 8.0;
         private const double yScale = 2.0;
-        private const double widthScale = 0.2;
-        private const double heightScale = 0.2;
+        private const double widthScale = 1;
+        private const double heightScale = 1;
 
         private const double refreshInterval = 50;
 
-        private const double scrollSpeed = 10.0;
+        private const double scrollSpeed = 5.0;
 
         public ObservableCollection<MarkerViewModel> Markers { get; }
 
@@ -57,12 +60,7 @@ namespace UwpTouchGame.ViewModels
 
             this.TotalHeight = new ReactiveProperty<double>(1).AddTo(this.Disposables);
 
-            var ready = this.ViewHeight.Where(h => h > 10).Zip(this.TotalHeight.Where(h => h > 10), (_, __) => true);
 
-            this.ViewVisibility = ready
-                .Select(x => x ? Visibility.Visible : Visibility.Collapsed)
-                .ToReadOnlyReactiveProperty(Visibility.Collapsed)
-                .AddTo(this.Disposables);
 
             Observable
                 .FromAsync(() => new MarkerLoader().LoadAsync(core.Markers))
@@ -85,14 +83,46 @@ namespace UwpTouchGame.ViewModels
                 })
                 .AddTo(this.Disposables);
 
-            this.DisplayPosition = Observable
+
+            var ready = this.ViewHeight
+                .Where(h => h > 10)
+                .Zip(this.TotalHeight.Where(h => h > 10), (_, __) => true);
+
+            var time = Observable
                 .Interval(TimeSpan.FromMilliseconds(refreshInterval))
                 .SkipUntil(ready)
                 .Scan(0, (prev, current) => (prev * scrollSpeed > this.TotalHeight.Value + this.ViewHeight.Value) ? 0 : (prev + 1))
+                .Publish();
+
+            this.DisplayPosition = time
                 .Select(t => new Thickness(0, 0, 0, -t * scrollSpeed + this.ViewHeight.Value))
                 .ObserveOnUIDispatcher()
                 .ToReadOnlyReactiveProperty()
                 .AddTo(this.Disposables);
+
+
+            this.ViewVisibility = this.DisplayPosition
+                .Skip(1)
+                .Select(x => Visibility.Visible)
+                .ToReadOnlyReactiveProperty(Visibility.Collapsed)
+                .AddTo(this.Disposables);
+
+            time.Pairwise()
+                .Where(x => x.NewItem < x.OldItem)
+                .Subscribe(_ => this.Reset())
+                .AddTo(this.Disposables);
+
+            //ready.Connect().AddTo(this.Disposables);
+            time.Connect().AddTo(this.Disposables);
+
+            //this.DisplayPosition = Observable
+            //    .Interval(TimeSpan.FromMilliseconds(refreshInterval))
+            //    .SkipUntil(ready)
+            //    .Scan(0, (prev, current) => (prev * scrollSpeed > this.TotalHeight.Value + this.ViewHeight.Value) ? 0 : (prev + 1))
+            //    .Select(t => new Thickness(0, 0, 0, -t * scrollSpeed + this.ViewHeight.Value))
+            //    .ObserveOnUIDispatcher()
+            //    .ToReadOnlyReactiveProperty()
+            //    .AddTo(this.Disposables);
 
         }
 
@@ -102,6 +132,10 @@ namespace UwpTouchGame.ViewModels
             this.Markers.Clear();
         }
 
+        private void Reset()
+        {
+            this.Markers.ForEach(x => x.Reset());
+        }
 
         public void OnViewSizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -121,6 +155,11 @@ namespace UwpTouchGame.ViewModels
         public double X => this.Margin.Value.Left;
         public double Y => this.Margin.Value.Bottom;
 
+        public ReactiveCommand DownCommand { get; }
+        public ReactiveCommand HoldCommand { get; }
+
+        public ReadOnlyReactiveProperty<bool> IsEnabled { get; }
+
 
         private MarkerContainer Source { get; }
 
@@ -134,7 +173,7 @@ namespace UwpTouchGame.ViewModels
 
 
             this.Color = source.IsHandled
-                .Select(x => x ? resource.PrimaryColor : resource.SecondaryColor)
+                .Select(x => !x ? resource.PrimaryColor : resource.SecondaryColor)
                 .ToReadOnlyReactiveProperty()
                 .AddTo(this.Disposables);
 
@@ -143,22 +182,32 @@ namespace UwpTouchGame.ViewModels
                 .ToReadOnlyReactiveProperty()
                 .AddTo(this.Disposables);
 
+            this.IsEnabled = this.Source.IsHandled.Select(x => !x).ToReadOnlyReactiveProperty().AddTo(this.Disposables);
+
+            this.DownCommand = new ReactiveCommand().WithSubscribe(e => this.Down((PointerRoutedEventArgs)e), this.Disposables);
+            this.HoldCommand = new ReactiveCommand().WithSubscribe(e => this.Hold((PointerRoutedEventArgs)e), this.Disposables);
+
         }
 
-        public void Down()
+        public void Down(PointerRoutedEventArgs e)
         {
-            if (this.Source.Marker.HitType == HitType.Down)
+            if (this.Source.Marker.HitType.HasFlag(HitType.Down))
             {
                 this.Source.Handle();
             }
         }
 
-        public void Hold()
+        public void Hold(PointerRoutedEventArgs e)
         {
-            if (this.Source.Marker.HitType == HitType.Hold)
+            if (e.Pointer.IsInContact && this.Source.Marker.HitType.HasFlag(HitType.Hold))
             {
                 this.Source.Handle();
             }
+        }
+
+        public void Reset()
+        {
+            this.Source.Reset();
         }
     }
 }

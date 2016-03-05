@@ -70,10 +70,10 @@ namespace UwpTouchGame.Models
                         marker = new NormalMarker(true);
                         break;
                     case MarkerSettingType.LineStart:
-                        marker = new LineNode(null, MarkerDefinition.lineLivingTime);
+                        marker = new LineNode(null, MarkerDefinition.LineLivingTime);
                         break;
                     case MarkerSettingType.Node:
-                        marker = new LineNode((LineNode)prev.Marker, MarkerDefinition.lineLivingTime);
+                        marker = new LineNode((LineNode)prev.Marker, MarkerDefinition.LineLivingTime);
                         break;
                     default:
                         continue;
@@ -86,7 +86,7 @@ namespace UwpTouchGame.Models
                     var width = container.X.Value - prev.X.Value;
                     var height = container.Y.Value - prev.Y.Value;
 
-                    var length = Math.Abs(height / MarkerDefinition.lineResolution);
+                    var length = Math.Abs(height / MarkerDefinition.LineResolution);
 
                     Enumerable.Range(1, (int)length - 1)
                         .Select(i => new MarkerContainer(new Line((LineNode)prev.Marker),
