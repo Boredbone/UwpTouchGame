@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Reactive.Bindings;
 using UwpTouchGame.Views;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -23,6 +25,15 @@ namespace UwpTouchGame
     /// </summary>
     sealed partial class App : Application
     {
+        private Lazy<CoreModel> core = null;
+        //TODO Dispose
+        
+        /// <summary>
+        /// Main Model
+        /// </summary>
+        public CoreModel Core => this.core.Value;
+        
+
         /// <summary>
         /// 単一アプリケーション オブジェクトを初期化します。これは、実行される作成したコードの
         ///最初の行であるため、main() または WinMain() と論理的に等価です。
@@ -31,6 +42,10 @@ namespace UwpTouchGame
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            this.UnhandledException += App_UnhandledException;
+
+            this.core = new Lazy<CoreModel>(() => new CoreModel());
         }
 
         /// <summary>
@@ -44,9 +59,11 @@ namespace UwpTouchGame
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                this.DebugSettings.EnableFrameRateCounter = true;
+                //this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
+
+            UIDispatcherScheduler.Initialize();
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -101,6 +118,17 @@ namespace UwpTouchGame
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: アプリケーションの状態を保存してバックグラウンドの動作があれば停止します
             deferral.Complete();
+        }
+
+
+        async void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+
+            var ex = e.Exception;
+            await new Windows.UI.Popups.MessageDialog
+                (ex.ToString() + "\n\n" + e.Message, "An exception occurred")
+                .ShowAsync();
         }
     }
 }

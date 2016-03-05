@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UwpTouchGame.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -22,9 +23,16 @@ namespace UwpTouchGame.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public MainPageViewModel ViewModel { get; } = new MainPageViewModel();
+
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.ViewModel.Dispose();
         }
     }
 }

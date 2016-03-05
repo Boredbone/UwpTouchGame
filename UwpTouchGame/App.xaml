@@ -3,6 +3,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:UwpTouchGame"
+    xmlns:views="using:UwpTouchGame.Views"
     RequestedTheme="Light">
+    <Application.Resources>
+        <views:ColorToSolidColorBrushValueConverter  x:Key="ColorToSolidColorBrush_ValueConverter"/>
+    </Application.Resources>
 
 </Application>

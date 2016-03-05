@@ -95,7 +95,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Models\Helpers\ObjectPool.cs" />
+    <Compile Include="Models\MarkerLoader.cs" />
+    <Compile Include="Models\TimeManager.cs" />
+    <Compile Include="Resources\MarkerDefinition.cs" />
+    <Compile Include="Resources\ScoreDefinition.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="Views\ColorToSolidColorBrushValueConverter.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -127,6 +134,8 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <Import Project="..\Utility\Utility.projitems" Label="Shared" />
+  <Import Project="..\XamlTools\XamlTools.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
