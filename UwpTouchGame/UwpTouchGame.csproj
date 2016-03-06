@@ -103,7 +103,6 @@
     <Compile Include="Models\IMarker.cs" />
     <Compile Include="Models\Line.cs" />
     <Compile Include="Models\LineNode.cs" />
-    <Compile Include="Models\LineTrace.cs" />
     <Compile Include="Models\MarkerContainer.cs" />
     <Compile Include="Models\MarkerLoader.cs" />
     <Compile Include="Models\MarkerManager.cs" />
