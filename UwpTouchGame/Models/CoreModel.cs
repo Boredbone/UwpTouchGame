@@ -17,7 +17,7 @@ namespace UwpTouchGame.Models
         public CoreModel()
         {
             this.Markers = new MarkerManager(GameViewDefinition.HitEventBufferSize).AddTo(this.Disposables);
-            this.Score = new ScoreProvider(this.Markers.Hit.Select(x => x.Target)).AddTo(this.Disposables);
+            this.Score = new ScoreProvider(this.Markers).AddTo(this.Disposables);
             ScoreDefinition.Set(this.Score);
         }
     }

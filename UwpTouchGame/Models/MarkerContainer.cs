@@ -41,6 +41,11 @@ namespace UwpTouchGame.Models
                 && (!this.IsHandled.Value || !this.Marker.IsOneShot))
             {
                 this.IsHandledSubject.OnNext(true);
+
+                if (!this.Marker.IsOneShot)
+                {
+                    this.IsHandledSubject.OnNext(false);
+                }
             }
         }
 

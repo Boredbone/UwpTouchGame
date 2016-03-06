@@ -14,9 +14,10 @@ namespace UwpTouchGame.Models
     {
         private HashSet<MarkerContainer> Markers { get; }
 
-
         private Subject<HitEventArgs> HitSubject { get; }
-        public IObservable<HitEventArgs> Hit => this.HitSubject.AsObservable();
+
+        public IObservable<MarkerContainer> Hit { get; }
+        public IObservable<LineNode> LineCompleted { get; }
 
         private HitEventArgs[] Pool { get; }
         private int poolIndex;
@@ -27,6 +28,7 @@ namespace UwpTouchGame.Models
         public MarkerManager(int eventPoolSize)
         {
             this.HitSubject = new Subject<HitEventArgs>().AddTo(this.Disposables);
+            this.Hit = this.HitSubject.Select(x => x.Target).Publish().RefCount();
 
             this.Pool = Enumerable.Range(0, eventPoolSize).Select(_ => new HitEventArgs()).ToArray();
             this.poolIndex = 0;
@@ -35,7 +37,9 @@ namespace UwpTouchGame.Models
 
             this.markerUnsubscribers = new CompositeDisposable();
             Disposable.Create(this.Clear).AddTo(this.Disposables);
-
+            
+            var lineTrace = new LineTrace(this.Hit).AddTo(this.Disposables);
+            this.LineCompleted = lineTrace.LineCompleted;
         }
 
         public void Add(MarkerContainer item)

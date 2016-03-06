@@ -19,14 +19,11 @@ namespace UwpTouchGame.Models
         public ReactiveProperty<int> Score { get; }
 
 
-        public ScoreProvider(IObservable<MarkerContainer> hitObservable)
+        public ScoreProvider(MarkerManager hitObservable)
         {
-
-            var lineTrace = new LineTrace(hitObservable).AddTo(this.Disposables);
-
-            this.Score = hitObservable
+            this.Score = hitObservable.Hit
                 .Select(x => this.GetScore(x.Marker))
-                .Merge(lineTrace.LineCompleted.Select(_ => this.LineCompleteScore))
+                .Merge(hitObservable.LineCompleted.Select(_ => this.LineCompleteScore))
                 .Scan((p, c) => p + c)
                 .ToReactiveProperty()
                 .AddTo(this.Disposables);
