@@ -20,11 +20,11 @@ namespace UwpTouchGame.ViewModels
         public ObservableCollection<MarkerViewModel> Markers { get; }
 
         public ReadOnlyReactiveProperty<int> Score { get; }
-        public ReactiveProperty<int> Count { get; }
+        public ReadOnlyReactiveProperty<int> Count { get; }
         public ReadOnlyReactiveProperty<Thickness> DisplayPosition { get; }
-        public ReactiveProperty<double> TotalHeight { get; }
         public ReadOnlyReactiveProperty<Visibility> ViewVisibility { get; }
 
+        public ReactiveProperty<double> TotalHeight { get; }
         private ReactiveProperty<double> ViewHeight { get; }
 
 
@@ -103,7 +103,7 @@ namespace UwpTouchGame.ViewModels
             this.Count = time.Select(_ => this.Markers
                      .Where(x => x.Source.Marker.Type == MarkerType.Node)
                      .Count(x => ((LineNode)x.Source.Marker).IsCaptured))
-                .ToReactiveProperty()
+                .ToReadOnlyReactiveProperty()
                 .AddTo(this.Disposables);
             
             // start timer

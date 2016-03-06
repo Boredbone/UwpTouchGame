@@ -11,6 +11,7 @@ namespace UwpTouchGame.Models
         MarkerType Type { get; }
         HitType HitType { get; }
         bool IsHandlable { get; }
+        bool IsOneShot { get; }
         void Reset();
     }
 }

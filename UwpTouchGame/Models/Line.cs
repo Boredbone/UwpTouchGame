@@ -16,6 +16,7 @@ namespace UwpTouchGame.Models
         public LineNode Parent { get; }
 
         public bool IsHandlable => this.Parent?.IsCaptured ?? false;
+        public bool IsOneShot => false;
 
         public Line(LineNode parent)
         {

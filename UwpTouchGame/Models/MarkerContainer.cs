@@ -29,18 +29,25 @@ namespace UwpTouchGame.Models
             this.IsHandled = this.IsHandledSubject.ToReadOnlyReactiveProperty(false).AddTo(this.Disposables);
         }
 
+
+        public void Down() => this.Handle(HitType.Down);
+
+        public void Hold() => this.Handle(HitType.Hold);
+
+        private void Handle(HitType filter)
+        {
+            if (this.Marker.HitType.HasFlag(filter)
+                && this.Marker.IsHandlable
+                && (!this.IsHandled.Value || !this.Marker.IsOneShot))
+            {
+                this.IsHandledSubject.OnNext(true);
+            }
+        }
+
         public void Reset()
         {
             this.Marker.Reset();
             this.IsHandledSubject.OnNext(false);
-        }
-
-        public void Handle()
-        {
-            if (this.Marker.IsHandlable && !this.IsHandled.Value)
-            {
-                this.IsHandledSubject.OnNext(true);
-            }
         }
     }
 }

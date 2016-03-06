@@ -10,6 +10,7 @@ namespace UwpTouchGame.Models
     {
         public HitType HitType => HitType.Down;
         public bool IsHandlable => true;
+        public bool IsOneShot => false;
         public MarkerType Type { get; }
 
         public NormalMarker(bool isBig)
